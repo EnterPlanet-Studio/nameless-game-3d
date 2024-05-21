@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     private int _jumpForce = 6;
     private float _rayDistance = 0.5f;
     [SerializeField] private Joystick joystick;
-    [SerializeField] private TMP_Text timer, time, tutorial, trashLeft;
+    [SerializeField] private TMP_Text timer, time, tutorial, trashLeft, _survive_time;
     private float fTime = 0f;
     private int iTime, iTimer = 0;
     [SerializeField] private float fTimer = -10f;
@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private int _mus = 0;
     [SerializeField] private PostProcessVolume _postProc;
     ColorGrading _cg;
+    [SerializeField]
+    private Transform _cube;
 
     void Start()
     {
@@ -42,6 +44,10 @@ public class Player : MonoBehaviour
             _jumpChecker = transform.Find("JumpChecker");
             trashLeft.text = _trash.ToString();
             _postProc.profile.TryGetSettings(out _cg);
+
+            if (fTimer == -666f) {
+                InvokeRepeating("SpawnCat", 0f, 15f);
+            }
         }
     }
 
@@ -67,27 +73,29 @@ public class Player : MonoBehaviour
             iTime = Mathf.RoundToInt(fTime);
             time.text = $"{iTime/60}:{iTime%60}";
 
-            if (fTimer != -10f && fTimer > 0f) {
+            if (fTimer != -10f && fTimer != -666f && fTimer > 0f) {
                 fTimer -= Time.deltaTime;
                 iTimer = Mathf.RoundToInt(fTimer);
                 timer.text = $"{iTimer/60}:{iTimer%60}";
             }
             else if (fTimer == -10f) timer.text = "Relax!";
+            else if (fTimer == -666f) timer.text = "Survive!";
             else {
                 timer.text = "RUN!!!";
                 timer.color = Color.red;
                 _cat.SetActive(true);
                 _cg.active = true;
             }
-
-            if (iTimer < 66 && iTimer != -10 && _mus < 1) {
-                _mus = 1;
-                _safe.Stop();
-                _notVerySafeAnymore.Play();
-            } else if (iTimer <= 0 && iTimer != -10 && _mus < 2) {
-                _mus = 2;
-                _notVerySafeAnymore.Stop();
-                _youAreDead.Play();
+            if (fTimer != -666f) {
+                if (iTimer < 66 && iTimer != -10 && _mus < 1) {
+                    _mus = 1;
+                    _safe.Stop();
+                    _notVerySafeAnymore.Play();
+                } else if (iTimer <= 0 && iTimer != -10 && _mus < 2) {
+                    _mus = 2;
+                    _notVerySafeAnymore.Stop();
+                    _youAreDead.Play();
+                }
             }
         }
     }
@@ -98,6 +106,10 @@ public class Player : MonoBehaviour
 
             _isGrounded = hit;
         }
+    }
+
+    void SpawnCat() {
+        Instantiate(_cat, _cube.position, Quaternion.identity);
     }
 
     public void Jump() {
@@ -122,10 +134,8 @@ public class Player : MonoBehaviour
                 SaveManager.instance.activeSave.unlocked = SceneManager.GetActiveScene().buildIndex;
 
             if (SaveManager.instance.activeSave.time.Count >= SceneManager.GetActiveScene().buildIndex) {
-                if (SaveManager.instance.activeSave.time[SceneManager.GetActiveScene().buildIndex - 1] > iTime || SaveManager.instance.activeSave.time[SceneManager.GetActiveScene().buildIndex - 1] == 0) {
-                    {
-                        SaveManager.instance.activeSave.time[SceneManager.GetActiveScene().buildIndex - 1] = iTime; }
-                }
+                if (SaveManager.instance.activeSave.time[SceneManager.GetActiveScene().buildIndex - 1] > iTime || SaveManager.instance.activeSave.time[SceneManager.GetActiveScene().buildIndex - 1] == 0)
+                        SaveManager.instance.activeSave.time[SceneManager.GetActiveScene().buildIndex - 1] = iTime;
             } else
                 SaveManager.instance.activeSave.time.Add(iTime);
 
@@ -151,6 +161,13 @@ public class Player : MonoBehaviour
         }
          else if (other.gameObject.CompareTag("enemy") && !_finished) {
             _deathPanel.SetActive(true);
+            if (fTimer == -666f) {
+                _survive_time.text = $"U survived: {iTime/60}:{iTime%60}";
+                if (SaveManager.instance.activeSave.endless_time < iTime || SaveManager.instance.activeSave.endless_time == 0) {
+                    SaveManager.instance.activeSave.endless_time = iTime; 
+                    SaveManager.instance.Save();
+                }
+            }
             Time.timeScale = 0f;
          }
     }

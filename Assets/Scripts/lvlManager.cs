@@ -21,7 +21,7 @@ public class lvlManager : MonoBehaviour
 
     void Start()
     {
-        sceneCount = SceneManager.sceneCountInBuildSettings - 2;
+        sceneCount = SceneManager.sceneCountInBuildSettings - 3;
         for (int i = 1; i <= sceneCount; i++) {
             GameObject btn = Instantiate(btnPrefab, forBtns.transform);
             btn.transform.SetParent(forBtns);

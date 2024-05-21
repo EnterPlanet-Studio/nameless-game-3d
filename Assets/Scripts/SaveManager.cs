@@ -63,4 +63,5 @@ public class SaveData
     public float masterVol = 0;
     public float musicVol = 0;
     public float soundsVol = 0;
+    public int endless_time = 0;
 }

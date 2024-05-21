@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _playMenu;
     [SerializeField]
+    private GameObject _levelsMenu;
+    [SerializeField]
+    private GameObject _endlessMenu;
+    [SerializeField]
     private GameObject _settingsMenu;
     [SerializeField]
     private GameObject _creditsMenu;
@@ -25,7 +29,16 @@ public class GameManager : MonoBehaviour
     private Slider sfxSlider;
     [SerializeField]
     private Slider musicSlider;
-    [SerializeField] private GameObject _pausePanel;
+    [SerializeField] 
+    private GameObject _pausePanel;
+
+    [SerializeField]
+    private GameObject _main_canvas;
+    [SerializeField]
+    private GameObject _skin_canvas;
+
+    [SerializeField]
+    private GameObject _skin_camera;
 
     void Start ()
     {
@@ -76,6 +89,14 @@ public class GameManager : MonoBehaviour
 
     public void HidePlay() {_playMenu.SetActive(false);}
 
+    public void Levels() {_levelsMenu.SetActive(true);}
+
+    public void HideLevels() {_levelsMenu.SetActive(false);}
+
+    public void Endless() {_endlessMenu.SetActive(true);}
+
+    public void HideEndless() {_endlessMenu.SetActive(false);}
+
     public void Settings() {_settingsMenu.SetActive(true);}
 
     public void HideSettings() {
@@ -92,6 +113,18 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
         Time.timeScale = 1;
         }
+
+    public void ToSkinsCanvas() {
+        _skin_canvas.SetActive(true);
+        _main_canvas.SetActive(false);
+        _skin_camera.SetActive(true);
+    }
+
+    public void ToMainCanvas() {
+        _skin_canvas.SetActive(false);
+        _main_canvas.SetActive(true);
+        _skin_camera.SetActive(false);
+    }
 
     public void Quit() {Application.Quit();}
 
@@ -111,6 +144,11 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1;
+    }
+
+    public void LoadEndless() {
+        SceneManager.LoadScene("endless");
         Time.timeScale = 1;
     }
 }
