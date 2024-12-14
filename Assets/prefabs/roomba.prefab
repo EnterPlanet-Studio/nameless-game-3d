@@ -1006,7 +1006,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5048916791742018066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78fe0a9494af367f1b1c42ce5c2ff69b, type: 3}
+  m_Script: {fileID: 11500000, guid: d47deccd3ee4cae5b832530d9f1d8770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _isGrounded: 0
@@ -1018,6 +1018,7 @@ MonoBehaviour:
   time: {fileID: 0}
   tutorial: {fileID: 0}
   trashLeft: {fileID: 0}
+  _survive_time: {fileID: 0}
   fTimer: -10
   _camera: {fileID: 0}
   _finishPanel: {fileID: 0}
@@ -1029,6 +1030,7 @@ MonoBehaviour:
   _notVerySafeAnymore: {fileID: 0}
   _youAreDead: {fileID: 0}
   _postProc: {fileID: 0}
+  _cube: {fileID: 0}
 --- !u!81 &4202489816623600989
 AudioListener:
   m_ObjectHideFlags: 0

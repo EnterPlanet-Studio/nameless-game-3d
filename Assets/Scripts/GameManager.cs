@@ -14,7 +14,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _endlessMenu;
     [SerializeField]
+    private GameObject _mpMenu;
+    [SerializeField]
     private GameObject _settingsMenu;
+    [SerializeField]
+    private GameObject _conSettingsMenu;
     [SerializeField]
     private GameObject _creditsMenu;
 
@@ -42,19 +46,22 @@ public class GameManager : MonoBehaviour
 
     void Start ()
     {
-        // do we have saved volume player prefs?
-        if(PlayerPrefs.HasKey("MasterVolume"))
-        {
-            // set the mixer volume levels based on the saved player prefs
-            mixer.SetFloat("MasterVolume", SaveManager.instance.activeSave.masterVol);
-            mixer.SetFloat("SoundsVolume", SaveManager.instance.activeSave.soundsVol);
-            mixer.SetFloat("MusicVolume", SaveManager.instance.activeSave.musicVol);
-            SetSliders();
-        }
-        // otherwise just set the sliders
-        else
-        {
-            SetSliders();
+        int sceneid = SceneManager.GetActiveScene().buildIndex;
+        if (sceneid == 0) {
+            // do we have saved volume player prefs?
+            if(PlayerPrefs.HasKey("MasterVolume"))
+            {
+                // set the mixer volume levels based on the saved player prefs
+                mixer.SetFloat("MasterVolume", SaveManager.instance.activeSave.masterVol);
+                mixer.SetFloat("SoundsVolume", SaveManager.instance.activeSave.soundsVol);
+                mixer.SetFloat("MusicVolume", SaveManager.instance.activeSave.musicVol);
+                SetSliders();
+            }
+            // otherwise just set the sliders
+            else
+            {
+                SetSliders();
+            }
         }
 }
     void SetSliders() {
@@ -97,13 +104,20 @@ public class GameManager : MonoBehaviour
 
     public void HideEndless() {_endlessMenu.SetActive(false);}
 
+    public void Multiplayer() {_mpMenu.SetActive(true);}
+
+    public void HideMultiplayer() {_mpMenu.SetActive(false);}
+
     public void Settings() {_settingsMenu.SetActive(true);}
 
     public void HideSettings() {
         WriteSettings();
         _settingsMenu.SetActive(false);
         SaveManager.instance.Save();
-        }
+    }
+
+    public void ConSettings() {_conSettingsMenu.SetActive(true);}
+    public void HideConSettings() {_conSettingsMenu.SetActive(false);}
 
     public void Credits() {_creditsMenu.SetActive(true);}
 
@@ -149,6 +163,10 @@ public class GameManager : MonoBehaviour
 
     public void LoadEndless() {
         SceneManager.LoadScene("endless");
+        Time.timeScale = 1;
+    }
+    public void LoadMp() {
+        SceneManager.LoadScene("mp");
         Time.timeScale = 1;
     }
 }
