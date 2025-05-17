@@ -82,7 +82,7 @@ public class player_mp : MonoBehaviour
             _targetRotation *= rotation;
         }*/
         if (_horizontalInput != 0 || _verticalInput != 0) {
-            Vector3 dir = new Vector3(-_rigidbody.velocity.x, 0, -_rigidbody.velocity.z);
+            Vector3 dir = new Vector3(-_rigidbody.linearVelocity.x, 0, -_rigidbody.linearVelocity.z);
             Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
             transform.rotation = rotation;
         }
@@ -92,7 +92,7 @@ public class player_mp : MonoBehaviour
     }
     private void Jump() {
         _rigidbody.AddForce(transform.up * _jumpForce, ForceMode.Impulse);
-        _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
+        _rigidbody.linearVelocity = new Vector3(_rigidbody.linearVelocity.x, 0, _rigidbody.linearVelocity.z);
         _readyToJump = false;
         Invoke("ResetJump", 0.5f);
     }
@@ -117,11 +117,11 @@ public class player_mp : MonoBehaviour
     }*/
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(_rigidbody.velocity.x, 0f, _rigidbody.velocity.z);
+        Vector3 flatVel = new Vector3(_rigidbody.linearVelocity.x, 0f, _rigidbody.linearVelocity.z);
         if (flatVel.magnitude > _moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized* _moveSpeed;
-            _rigidbody.velocity = new Vector3(limitedVel.x, _rigidbody.velocity.y, limitedVel.z);
+            _rigidbody.linearVelocity = new Vector3(limitedVel.x, _rigidbody.linearVelocity.y, limitedVel.z);
         }
 
     }

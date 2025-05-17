@@ -18,13 +18,13 @@ public class cat : MonoBehaviour
     void Update()
     {
         if (_roomba != null) {
-            _rb.velocity = new Vector3(
+            _rb.linearVelocity = new Vector3(
                 (Mathf.Clamp(_roomba.position.x - transform.position.x, -1f, 1f))*_speed*Time.deltaTime, 
-                _rb.velocity.y, 
+                _rb.linearVelocity.y, 
                 (Mathf.Clamp(_roomba.position.z - transform.position.z, -1f, 1f))*_speed*Time.deltaTime
             );
 
-            Vector3 dir = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+            Vector3 dir = new Vector3(_rb.linearVelocity.x, 0, _rb.linearVelocity.z);
             Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
             transform.rotation = rotation;
             _speed += Time.deltaTime;

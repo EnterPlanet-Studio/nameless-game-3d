@@ -54,13 +54,13 @@ public class Player : MonoBehaviour
     void Update() {
         if (!_finished && _isLevel) {
             if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
-                rb.velocity = new Vector3(_speed*Input.GetAxis("Horizontal"), rb.velocity.y, _speed*Input.GetAxis("Vertical"));
+                rb.linearVelocity = new Vector3(_speed*Input.GetAxis("Horizontal"), rb.linearVelocity.y, _speed*Input.GetAxis("Vertical"));
             else
-                rb.velocity = new Vector3(_speed*joystick.Horizontal, rb.velocity.y, _speed*joystick.Vertical);
+                rb.linearVelocity = new Vector3(_speed*joystick.Horizontal, rb.linearVelocity.y, _speed*joystick.Vertical);
             _camera.position = new Vector3(transform.position.x + 3f, 6.5f, transform.position.z - 4f);
 
-            if (rb.velocity.x != 0 || rb.velocity.z != 0) {
-                Vector3 dir = new Vector3(-rb.velocity.x, 0, -rb.velocity.z);
+            if (rb.linearVelocity.x != 0 || rb.linearVelocity.z != 0) {
+                Vector3 dir = new Vector3(-rb.linearVelocity.x, 0, -rb.linearVelocity.z);
                 Quaternion rotation = Quaternion.LookRotation(dir, Vector3.up);
                 transform.rotation = rotation;
                 _arrow.SetActive(true);
